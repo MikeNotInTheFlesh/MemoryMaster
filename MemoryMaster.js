@@ -201,12 +201,14 @@ function draw() {
   if (hideCardsTimer > 0) {
 	  push();
 	  imageMode(CENTER);
-	  image(thumbsDown, width / 2, height / 2, width / 4, width / 4);
+	  tint(255, 188); // make semi-transparent
+	  image(thumbsDown, width / 2, height / 2, width / 3, width / 3);
 	  pop();
   } else if (correctGuessTimer > 0) {
 	  push();
 	  imageMode(CENTER);
-	  image(thumbsUp, width / 2, height / 2, width / 4, width / 4);
+	  tint(255, 188);
+	  image(thumbsUp, width / 2, height / 2, width / 3, width / 3);
 	  pop();
 	  showName();
   }
@@ -290,7 +292,7 @@ function createBoard(cardWidth) {
   }
 }
 
-function mousePressed() {
+function mouseReleased() {
 	
 	// These buttons start a new game
 	if (winFlag) {
