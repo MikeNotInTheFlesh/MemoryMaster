@@ -429,11 +429,11 @@ function winner() {
   textSize(bigness);
   fill(255, 0, 0, 255);
   if (score > 0) {
-    text("You Win!", width / 2, height / 2);
+    text("You Win!", width / 2, height * 3 / 5);
     textAlign(CENTER, TOP);
     fill(255, 255, 255, 255);
     textSize(bigness);
-    text("score: " + score, width / 2, height / 2);
+    text("score: " + score, width / 2, height * 3 / 5);
   //text("seconds: "+ str(timer / 30), width / 2, height / 2);
   }
   textAlign(CENTER, CENTER);
