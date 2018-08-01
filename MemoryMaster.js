@@ -21,7 +21,6 @@ var gameModes = ["memory", "french", "birds"];
 var gameModeButtons = [];
 
 function preload() {
-	// soundFormats('mp3');
 	correctPlay = loadSound('data/correctPlay.mp3');
 	levelComplete = loadSound('data/levelComplete.mp3');
 	
