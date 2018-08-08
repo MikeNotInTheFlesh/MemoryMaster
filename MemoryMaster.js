@@ -23,12 +23,12 @@ var gameModeButtons = [];
 function preload() {
 	correctPlay = loadSound('data/correctPlay.mp3');
 	levelComplete = loadSound('data/levelComplete.mp3');
-	
+
   cardBack = loadImage("data/cardBack.jpg");
   backRed = loadImage("data/backRed.jpg");
   backBlue = loadImage("data/backBlue.jpg");
   tableCloth = loadImage("data/tableCloth.jpg");
-  
+
   musicImage = loadImage("data/musicImage.png");
   musicNote = loadImage("data/musicNote.png");
   soundOn = loadImage("data/soundOn.gif");
@@ -39,22 +39,22 @@ function preload() {
 }
 
 function setup() {
-	
+
 	correctPlay.setVolume(0.6);
 	levelComplete.setVolume(0.4);
-	
+
   // createCanvas(window.innerWidth * 0.95, window.innerHeight * 0.95);
   createCanvas(window.innerWidth * 1, window.innerHeight * 1);
   frameRate(30);
   tableCloth.resize(width, height);
-  
+
   cardW = min(height, width);
   createBoard(cardW);
-  
+
   textFont(myFont);
-  
+
   soundIcon = new soundButton();
-  
+
   // Create the buttons which the players uses choose the number of cards in new game
   if (buttons != null){ // I declared 'buttons = []' at the top so it should never be null? delete this if???
     for (var i = 0; i < 4; i++){
@@ -67,7 +67,7 @@ function setup() {
 	gameModeButtons[i] = new Button(i * width / 3 + width / 20,  height / 6,
     width / 4, height / 15, gameModes[i]);
   }
-  
+
   if (gameMode == 'french') {
   birds = [
     "cat_le_chat",
@@ -132,7 +132,7 @@ function setup() {
     "yellowy"
   ]
   }
-  
+
   // We shuffle the images here
   birds = shuffle(birds);
   for (let i = 0; i < numCards; i++) {
@@ -150,25 +150,25 @@ function draw() {
   fill(255);
   imageMode(CORNER);
   background(tableCloth);
-  
+
   if (! winFlag) {
     timer += 1;
   }
-  
+
   hideCardsTimer -= 1;
   if (hideCardsTimer == 0){
     hideCards();
   }
-  
+
   correctGuessTimer -= 1;
   if (correctGuessTimer == 0){
     correctGuess();
   }
-  
+
   for (let card of cards){
     card.show();
   }
-  
+
   if (winFlag) {
     for (let button of buttons) {
       button.visible = true;
@@ -178,25 +178,26 @@ function draw() {
 	}
     winner();
   }
-  
+
   for (let button of buttons) {
     button.show();
   }
   for (let button of gameModeButtons) {
 	button.show();
   }
-  
+
   soundIcon.show();
-  
-    if (localStorage.getItem("highScore" + numCards + gameMode)){
-	  push();
-	  fill(255);
-	  textAlign(LEFT, TOP);
-	  textSize(min(width, height) / 30);
+
+	push();
+	fill(255);
+	textAlign(LEFT, TOP);
+	textSize(min(width, height) / 30);
+	text("Score: " + score, 5, height * 9.5 / 10);
+  if (localStorage.getItem("highScore" + numCards + gameMode)){
 	  text("High score: " + localStorage.getItem("highScore" + numCards + gameMode), 5, 5);
-	  pop();
-  }
-  
+  	}
+	pop();
+
   if (hideCardsTimer > 0) {
 	  push();
 	  imageMode(CENTER);
@@ -211,7 +212,7 @@ function draw() {
 	  pop();
 	  showName();
   }
-  
+
 }
 
 function createBoard(cardWidth) {
@@ -226,7 +227,7 @@ function createBoard(cardWidth) {
   picIds = [];
   songIds = [];
   cards = [];
-  
+
   // make a list of ids
   for (let i = 0; i < numCards * 2; i++) {
     if (i < numCards) {
@@ -237,14 +238,14 @@ function createBoard(cardWidth) {
   }
   // shuffle ids to use as param for new Cards
   ids = shuffle(ids);
-  
+
   // Create Cards and put them in array: cards
   for (let i = 0; i < 2 * numCards; i++){
     if(nextX + gap + cardWidth > width){
       nextX = gap;
       nextY += (cardWidth * 3 / 4 + gap);
     }
-	
+
 	// var picIds = [];
 	// var songIds = [];
 	if (songIds.includes(ids[i]) || gameMode == 'memory'){
@@ -260,7 +261,7 @@ function createBoard(cardWidth) {
 	}
 	nextX += (gap + cardWidth);
   }
-  
+
   // center the cards on the board
   // centering on the x is harder because the last card may not be farthest right
   while (true) {
@@ -277,7 +278,7 @@ function createBoard(cardWidth) {
 		  break;
 	  }
   }
-  
+
   // center the y axis
   while (cards[0].y < height - (cards[cards.length - 1].y + cards[0].h + gap)) {
 	  for (let card of cards) {
@@ -292,7 +293,7 @@ function createBoard(cardWidth) {
 }
 
 function mouseReleased() {
-	
+
 	// These buttons start a new game
 	if (winFlag) {
 		for (let button of buttons) {
@@ -330,7 +331,7 @@ function mouseReleased() {
 	} else if (timer < 5) {
 		return false;
 	}
-	
+
 	// Did someone click a card?
 	for (let i = cards.length - 1; i >= 0; i--) {
 		if (cards[i].x < mouseX && cards[i].x + cards[i].w > mouseX
@@ -484,7 +485,7 @@ function showName() {
 			    if (gameMode == "french") {
 			      birdNames.shift();
 			  }
-			  
+
 			  // For birds we'll put them upper-case
 			  if (gameMode == "birds") {
 			  for (let i = 0; i < birdNames.length; i++){
