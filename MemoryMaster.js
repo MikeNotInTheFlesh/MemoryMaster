@@ -308,7 +308,7 @@ function mouseReleased() {
 				if (gameMode == "memory") {
 					timerDelay = 30;
 				} else if (gameMode == "birds") {
-					timerDelay = 180;
+					timerDelay = 120;
 				} else if (gameMode == "french") {
 					timerDelay = 60;
 				}
@@ -375,7 +375,7 @@ function checkGuess(id){
   } else{
     // do stuff for incorrect answer
     firstGuessId = -1;
-    hideCardsTimer = timerDelay * 2;
+    hideCardsTimer = timerDelay * 1.5;
     score -= numCards * 1;
   }
 }
