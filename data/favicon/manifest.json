@@ -1,5 +1,5 @@
 {
- "name": "App",
+ "name": "Memory Master",
  "icons": [
   {
    "src": "\/android-icon-36x36.png",
@@ -38,4 +38,6 @@
    "density": "4.0"
   }
  ]
+ "start_url": "/index.html",
+ "display": "standalone"
 }
