@@ -19,6 +19,7 @@ var cardW;
 var gameMode = 'memory';
 var gameModes = ["memory", "french", "birds"];
 var gameModeButtons = [];
+var fr = 30; // frameRate
 
 function preload() {
 	correctPlay = loadSound('data/correctPlay.mp3');
@@ -212,7 +213,13 @@ function draw() {
 	  pop();
 	  showName();
   }
-
+	push();
+	textSize(width / 30);
+	if (timer % 6 == 1){
+		fr = frameRate();
+	}
+	text("Framerate: " + fr, width / 2, height / 2);
+	pop();
 }
 
 function createBoard(cardWidth) {
