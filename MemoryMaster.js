@@ -46,7 +46,7 @@ function setup() {
 
   // createCanvas(window.innerWidth * 0.95, window.innerHeight * 0.95);
   createCanvas(window.innerWidth * 1, window.innerHeight * 1);
-  frameRate(30);
+  frameRate(10);
   tableCloth.resize(width, height);
 
   cardW = min(height, width);
@@ -313,11 +313,11 @@ function mouseReleased() {
 			if (button.checkPressed()) {
 				gameMode = button.id;
 				if (gameMode == "memory") {
-					timerDelay = 30;
+					timerDelay = 10;
 				} else if (gameMode == "birds") {
-					timerDelay = 120;
+					timerDelay = 40;
 				} else if (gameMode == "french") {
-					timerDelay = 60;
+					timerDelay = 20;
 				}
 			}
 		}
