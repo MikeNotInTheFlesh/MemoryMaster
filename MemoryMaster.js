@@ -213,13 +213,13 @@ function draw() {
 	  pop();
 	  showName();
   }
-	push();
-	textSize(width / 30);
-	if (timer % 6 == 1){
-		fr = frameRate();
-	}
-	text("Framerate: " + fr, width / 2, height / 2);
-	pop();
+	// push();
+	// textSize(width / 30);
+	// if (timer % 6 == 1){
+		// fr = frameRate();
+	// }
+	// text("Framerate: " + fr, width / 2, height / 2);
+	// pop();
 }
 
 function createBoard(cardWidth) {
