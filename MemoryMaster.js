@@ -1,9 +1,14 @@
-var numCards = 1;
+var numCards = 12;
 var cards = [];
 var firstGuessId = -1;
 var timer = 0;
+var timerMillis;
+var timerDelay = 60;
+var timerDelayMillis = 800;
 var hideCardsTimer = 0;
+var hideCardsMillisTimer = 0;
 var correctGuessTimer = 0;
+var correctGuessMillisTimer = 0;
 var pics = [];
 var calls = [];
 //var cardBack;
@@ -12,7 +17,6 @@ var winFlag = true;
 var buttons = [];
 var font;
 var score = 0;
-var timerDelay = 60;
 var picIds = [];
 var songIds = [];
 var cardW;
@@ -46,7 +50,7 @@ function setup() {
 
   // createCanvas(window.innerWidth * 0.95, window.innerHeight * 0.95);
   createCanvas(window.innerWidth * 1, window.innerHeight * 1);
-  frameRate(10);
+  frameRate(fr);
   tableCloth.resize(width, height);
 
   cardW = min(height, width);
@@ -59,7 +63,7 @@ function setup() {
   // Create the buttons which the players uses choose the number of cards in new game
   if (buttons != null){ // I declared 'buttons = []' at the top so it should never be null? delete this if???
     for (var i = 0; i < 4; i++){
-      buttons[i] = new Button(i * width / 5 + width / 10, 2 * height / 6,
+      buttons[i] = new Button(i * width / 5 + width / 10, 2.1 * height / 6,
       width / 6, height / 10, i);
     }
   }
@@ -151,19 +155,23 @@ function draw() {
   fill(255);
   imageMode(CORNER);
   background(tableCloth);
+  
+  timerMillis = millis();
 
   if (! winFlag) {
     timer += 1;
   }
 
-  hideCardsTimer -= 1;
-  if (hideCardsTimer == 0){
-    hideCards();
+  //hideCardsTimer -= 1;
+  if (/*hideCardsTimer*/ hideCardsMillisTimer != 0 && hideCardsMillisTimer < timerMillis){
+	  hideCardsMillisTimer = 0;
+	  hideCards();
   }
 
-  correctGuessTimer -= 1;
-  if (correctGuessTimer == 0){
-    correctGuess();
+  //correctGuessTimer -= 1;
+  if (/*correctGuessTimer == 0*/ correctGuessMillisTimer != 0 && correctGuessMillisTimer < timerMillis){
+	  correctGuessMillisTimer = 0;
+	  correctGuess();
   }
 
   for (let card of cards){
@@ -199,13 +207,13 @@ function draw() {
   	}
 	pop();
 
-  if (hideCardsTimer > 0) {
+  if (/*hideCardsTimer > 0*/ hideCardsMillisTimer > timerMillis) {
 	  push();
 	  imageMode(CENTER);
 	  tint(255, 188); // make semi-transparent
 	  image(thumbsDown, width / 2, height / 2, width / 3, width / 3);
 	  pop();
-  } else if (correctGuessTimer > 0) {
+  } else if (/*correctGuessTimer > 0 */ correctGuessMillisTimer > timerMillis) {
 	  push();
 	  imageMode(CENTER);
 	  tint(255, 188);
@@ -313,26 +321,36 @@ function mouseReleased() {
 			if (button.checkPressed()) {
 				gameMode = button.id;
 				if (gameMode == "memory") {
-					timerDelay = 10;
+					//timerDelay = 10;
+					timerDelayMillis = 800;
 				} else if (gameMode == "birds") {
-					timerDelay = 40;
+					//timerDelay = 40;
+					timerDelayMillis = 2500;
 				} else if (gameMode == "french") {
-					timerDelay = 20;
+					//timerDelay = 20;
+					timerDelayMillis = 1500;
 				}
 			}
 		}
 	}
 	// If someone wants to play faster clicking the screen will let them
-	if (hideCardsTimer > 0) {
+	if (/*hideCardsTimer > 0 */ hideCardsMillisTimer != 0) {
 		// added a buffer to timerDelay for touch screens touching too fast
-		if (hideCardsTimer < timerDelay * 2 - 6) {
+		/*if (hideCardsTimer < timerDelay * 2 - 6) {
 			hideCardsTimer = 1;
+		}*/
+		if (hideCardsMillisTimer > (timerMillis - 1.5 * timerDelayMillis + 100)) {
+			hideCardsMillisTimer = timerMillis;
 		}
 		return false;
-	} else if (correctGuessTimer > 0 && hideCardsTimer < timerDelay - 6) {
-		if (correctGuessTimer < timerDelay * 2 - 6) {
-			correctGuessTimer = 1;
-		}
+	} else if (/*correctGuessTimer > 0 && hideCardsTimer < timerDelay - 6 */ correctGuessMillisTimer != 0 
+		&& correctGuessMillisTimer != 0) {
+			if (correctGuessMillisTimer > (timerMillis - timerDelayMillis + 100)) {
+				correctGuessMillisTimer = timerMillis;
+			}
+		// if (correctGuessTimer < timerDelay * 2 - 6) {
+			// correctGuessTimer = 1;
+		// }
 		return false;
 		// bug fix. Starting a new game would select the first card.
 	} else if (timer < 5) {
@@ -377,12 +395,14 @@ function checkGuess(id){
     firstGuessId = id;
   } else if (firstGuessId == id) {
     // do stuff for correct answer
-    correctGuessTimer = timerDelay;
+    //correctGuessTimer = timerDelay;
+	correctGuessMillisTimer = timerMillis + timerDelayMillis;
     score += numCards * 5;
   } else{
     // do stuff for incorrect answer
     firstGuessId = -1;
-    hideCardsTimer = timerDelay * 1.5;
+    //hideCardsTimer = timerDelay * 1.5;
+	hideCardsMillisTimer = timerMillis + timerDelayMillis * 1.5;
     score -= numCards * 1;
   }
 }
@@ -448,6 +468,8 @@ function winner() {
   textAlign(CENTER, CENTER);
   fill(255, 215, 0, 255);
   text("Start New Game", width / 2, height / 16);
+  textSize(bigness / 1.5);
+  text("Select Number of Cards", width / 2, buttons[0].y - height / 20);
   if (localStorage.getItem("highScore" + numCards + gameMode) == score && score > 0) {
 	  // stroke('yellow');
 	  // strokeWeight(bigness / 20);
@@ -466,8 +488,10 @@ function newGame(tempNumCards) {
   cards.length = 0;
   timer = 0;
   firstGuessId = -1;
-  correctGuessTimer = 0;
-  hideCardsTimer = 0;
+  //correctGuessTimer = 0;
+  correctGuessMillisTimer = 0;
+  //hideCardsTimer = 0;
+  hideCardsMillisTimer = 0;
   winFlag = false;
   score = 0;
   setup();
